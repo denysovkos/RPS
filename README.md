@@ -47,25 +47,3 @@ You can store app settings under `app/config/`. A file matching `process.env.NOD
 ```js
 import config from './config';
 ```
-
-## Data fetching and client hydration
-
-Read the [Redux](https://rackt.github.io/redux/) guide if you are new to redux. Write Redux actions and stores as normal, and if the action creator is asynchronous then it should return a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) (or a [Promise.all](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all)) in the inner function.
-
-You should write dispatches for actions that must be called for the container to be ready:
-
-```js
-static readyOnActions(dispatch, params) {
-	return Promise.all([
-		dispatch(UserActions.fetchUserIfNeeded(params.id))
-	]);
-}
-```
-
-You should also invoke the actions in `componentDidMount`. This ensures that if the component is reached on the client, then the same actions will be invoked. It's up to the action to figure out if fetches for data need to be made or not:
-
-```js
-componentDidMount() {
-	User.readyOnActions(this.props.dispatch, this.props.params);
-}
-```
